@@ -10,9 +10,10 @@ const copyTooltip = document.querySelector('.copy-tooltip');
 const cookieConsent = document.getElementById('cookieConsent');
 const acceptCookiesBtn = document.getElementById('acceptCookies');
 const declineCookiesBtn = document.getElementById('declineCookies');
-const videoPlaceholder = document.querySelector('.video-placeholder');
 const videoEmbed = document.querySelector('.video-embed');
-const playButton = document.querySelector('.play-button');
+// האלמנטים הבאים הוסרו מהדף והוחלפו בתג וידאו ישיר
+// const videoPlaceholder = document.querySelector('.video-placeholder');
+// const playButton = document.querySelector('.play-button');
 
 // Mobile Menu Toggle
 if (mobileMenu) {
@@ -89,23 +90,10 @@ if (copyLinkBtn && referralLink) {
     });
 }
 
-// Video player functionality
-if (videoPlaceholder && videoEmbed && playButton) {
-    playButton.addEventListener('click', () => {
-        // Create iframe for video embed (YouTube example)
-        const iframe = document.createElement('iframe');
-        iframe.setAttribute('src', 'https://www.youtube.com/embed/VIDEO_ID?autoplay=1');
-        iframe.setAttribute('frameborder', '0');
-        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-        iframe.setAttribute('allowfullscreen', '');
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        
-        // Replace placeholder with iframe
-        videoEmbed.appendChild(iframe);
-        videoPlaceholder.style.display = 'none';
-        videoEmbed.style.display = 'block';
-        
+// Video player functionality - עודכן למבנה החדש עם תג video
+const videoElement = document.querySelector('.video-embed video');
+if (videoElement) {
+    videoElement.addEventListener('play', () => {
         // Track video play event for analytics
         if (typeof gtag === 'function') {
             gtag('event', 'play_video', {

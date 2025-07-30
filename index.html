@@ -115,14 +115,11 @@
     <section id="video-section" class="video-section">
         <div class="container">
             <div class="video-container" id="videoContainer" aria-label="סרטון הסבר על רכישה קבוצתית">
-                <div class="video-placeholder">
-                    <button class="play-button" id="playButton" role="button" tabindex="0" aria-label="הפעל סרטון">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <img src="images/video-thumbnail.jpg" alt="סרטון הסבר" class="video-thumbnail">
-                </div>
-                <div class="video-embed" style="display: none;">
-                    <!-- יוחלף ע"י JavaScript בעת לחיצה -->
+                <div class="video-embed">
+                    <video width="100%" height="auto" controls preload="metadata" poster="images/video-thumbnail.jpg">
+                        <source src="mp4/media/video.mp4" type="video/mp4">
+                        הדפדפן שלך לא תומך בתגית וידאו.
+                    </video>
                 </div>
                 <p class="video-caption">צפו: מהי רכישה קבוצתית וכיצד היא חוסכת לכם כסף</p>
             </div>
@@ -397,9 +394,7 @@
         <div class="container">
             <h2 class="section-title">אודות VIPO</h2>
             <div class="about-content">
-                <div class="about-image skeleton-loading">
-                    <img data-src="images/vipo-logo.png" alt="VIPO" class="lazy-load">
-                </div>
+
                 <div class="about-text">
                     <p>VIPO הינה חברה ישראלית עם נוכחות בסין המתמחה ביבוא ישיר של מוצרים איכותיים במחירים אטרקטיביים. אנו מפעילים מערך לוגיסטי מתקדם המאפשר לנו להביא מוצרים ישירות מהיצרנים אל הצרכן הסופי, ללא פערי תיווך.</p>
                     <p>החברה הוקמה בשנת 2018 ומאז סיפקה מוצרים לאלפי לקוחות מרוצים בישראל. הצוות שלנו כולל מומחי רכש, אנשי לוגיסטיקה ונציגי שירות לקוחות המחויבים להבטיח חוויית קנייה מושלמת.</p>
