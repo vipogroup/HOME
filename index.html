@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="קונים חכם - פלטפורמת רכישה קבוצתית חכמה וחסכונית">
+    <title>קונים חכם | רכישה קבוצתית חכמה</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/accessibility.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+</head>
+<body>
+    <!-- קישור דילוג לתוכן הראשי - נגישות -->
+    <a href="#main-content" class="skip-to-content">דלג לתוכן הראשי</a>
+    
+    <!-- Navbar - תמיד דבוק עליון -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="#hero">
+                    <img src="images/logo.png" alt="קונים חכם" class="logo-img">
+                </a>
+            </div>
+            <div class="menu-toggle" id="mobile-menu" aria-label="תפריט ניווט" aria-expanded="false" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#hero" class="nav-link">דף הבית</a></li>
+                <li><a href="#about-vipo" class="nav-link">VIPO</a></li>
+                <li><a href="#how-it-works" class="nav-link">איך זה עובד?</a></li>
+                <li><a href="#faq" class="nav-link">מי אנחנו</a></li>
+                <li><a href="#contact" class="nav-link">צור קשר</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="main-content" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>קונים חכם,<br>חוסכים יותר</h1>
+                <p class="hero-subtitle">רכישה קבוצתית חכמה במחירים שלא תאמינו</p>
+                <div class="cta-buttons">
+                    <a href="#products" class="btn btn-primary">למוצרים שזמינים עכשיו</a>
+                    <a href="#how-it-works" class="btn btn-secondary">איך זה עובד?</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hot Products Slider -->
+        <div class="hot-products-slider" role="region" aria-label="מוצרים חמים">
+            <h2>המוצרים החמים שלנו</h2>
+            <div class="products-container">
+                <div class="product-card">
+                    <div class="product-image skeleton-loading">
+                        <img data-src="images/products/product1.jpg" alt="מוצר 1" class="lazy-load">
+                    </div>
+                    <div class="product-info">
+                        <h3>מכונת קפה דלונגי</h3>
+                        <p class="price">החל מ-₪1,150</p>
+                        <span class="discount-badge">חיסכון של עד ₪700</span>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image skeleton-loading">
+                        <img data-src="images/products/product2.jpg" alt="מוצר 2" class="lazy-load">
+                    </div>
+                    <div class="product-info">
+                        <h3>מקרר סמסונג</h3>
+                        <p class="price">החל מ-₪3,200</p>
+                        <span class="discount-badge">חיסכון של עד ₪1,500</span>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image skeleton-loading">
+                        <img data-src="images/products/product3.jpg" alt="מוצר 3" class="lazy-load">
+                    </div>
+                    <div class="product-info">
+                        <h3>טלוויזיה חכמה LG</h3>
+                        <p class="price">החל מ-₪1,800</p>
+                        <span class="discount-badge">חיסכון של עד ₪900</span>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image skeleton-loading">
+                        <img data-src="images/products/product4.jpg" alt="מוצר 4" class="lazy-load">
+                    </div>
+                    <div class="product-info">
+                        <h3>שואב אבק רובוטי</h3>
+                        <p class="price">החל מ-₪950</p>
+                        <span class="discount-badge">חיסכון של עד ₪450</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-controls">
+                <button class="prev-btn" aria-label="מוצר קודם"><i class="fas fa-chevron-right"></i></button>
+                <button class="next-btn" aria-label="מוצר הבא"><i class="fas fa-chevron-left"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section id="video-section" class="video-section">
+        <div class="container">
+            <div class="video-container" id="videoContainer" aria-label="סרטון הסבר על רכישה קבוצתית">
+                <div class="video-placeholder">
+                    <button class="play-button" id="playButton" role="button" tabindex="0" aria-label="הפעל סרטון">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <img src="images/video-thumbnail.jpg" alt="סרטון הסבר" class="video-thumbnail">
+                </div>
+                <div class="video-embed" style="display: none;">
+                    <!-- יוחלף ע"י JavaScript בעת לחיצה -->
+                </div>
+                <p class="video-caption">צפו: מהי רכישה קבוצתית וכיצד היא חוסכת לכם כסף</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">איך זה עובד?</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>בחירת מוצר</h3>
+                    <p>בוחרים את המוצר שמעניין אתכם מתוך המגוון שלנו</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>הצטרפות לקבוצה</h3>
+                    <p>נרשמים לקבוצת הרכישה ללא התחייבות</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>שיתוף חברים</h3>
+                    <p>משתפים חברים וקרובים כדי להגדיל את הקבוצה</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>המחיר יורד</h3>
+                    <p>ככל שיותר אנשים מצטרפים, המחיר יורד לכולם</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>סגירת קבוצה</h3>
+                    <p>בסיום ההרשמה מקבלים הודעה עם המחיר הסופי</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <h3>תשלום ומשלוח</h3>
+                    <p>משלמים רק אם מרוצים מהמחיר ומקבלים את המוצר הביתה</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Price Table Section -->
+    <section id="price-table" class="price-table">
+        <div class="container">
+            <h2 class="section-title">המחיר יורד לפי כמות</h2>
+            <div class="price-table-container">
+                <div class="price-row">
+                    <div class="participants">1-9 משתתפים</div>
+                    <div class="price">₪1,850</div>
+                </div>
+                <div class="price-row">
+                    <div class="participants">10-19 משתתפים</div>
+                    <div class="price">₪1,600</div>
+                </div>
+                <div class="price-row">
+                    <div class="participants">20-39 משתתפים</div>
+                    <div class="price">₪1,350</div>
+                </div>
+                <div class="price-row highlight">
+                    <div class="participants">40+ משתתפים</div>
+                    <div class="price">₪1,150</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- No Commitment Section -->
+    <section id="no-commitment" class="no-commitment">
+        <div class="container">
+            <div class="info-box">
+                <div class="info-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2>אין התחייבות</h2>
+                <p>מצטרפים בלי לשלם; רק בסגירת הקבוצה משלמים; אם לא – אין חיוב.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Referral Section -->
+    <section id="referral" class="referral">
+        <div class="container">
+            <h2 class="section-title">חבר מביא חבר</h2>
+            <div class="referral-content">
+                <div class="referral-info">
+                    <h3>שיתפת – הרווחת</h3>
+                    <p>קבלו 150 ₪ על כל רכישה שמתבצעת דרך הקישור האישי שלכם!</p>
+                </div>
+                <div class="referral-link-box">
+                    <label for="referral-link">הקישור האישי שלך:</label>
+                    <div class="copy-link-container">
+                        <input type="text" id="referral-link" value="https://konim-hacham.co.il/ref/123456" readonly>
+                        <button id="copy-link-btn" class="btn btn-copy" aria-label="העתק קישור">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="copy-tooltip">הועתק!</div>
+                </div>
+                <div class="referral-meter">
+                    <div class="meter-info">
+                        <span id="friends-count">0</span> חברים
+                        <span class="separator">|</span>
+                        <span id="earnings">0</span> ₪
+                    </div>
+                    <div class="meter-bar">
+                        <div class="meter-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience Section -->
+    <section id="target-audience" class="target-audience">
+        <div class="container">
+            <h2 class="section-title">למי זה מתאים</h2>
+            <div class="audience-grid">
+                <div class="audience-card">
+                    <div class="audience-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>משפחות</h3>
+                    <p>חיסכון משמעותי במוצרים לבית ולמשפחה</p>
+                </div>
+                <div class="audience-card">
+                    <div class="audience-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h3>עסקים קטנים</h3>
+                    <p>ציוד משרדי ומוצרים לעסק במחירים מוזלים</p>
+                </div>
+                <div class="audience-card">
+                    <div class="audience-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>יזמים</h3>
+                    <p>הזדמנות לרכישת מוצרים איכותיים בעלות נמוכה</p>
+                </div>
+                <div class="audience-card">
+                    <div class="audience-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>מוסדות</h3>
+                    <p>פתרונות רכש מרוכז למוסדות וארגונים</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="section-title">שאלות נפוצות</h2>
+            <div class="accordion">
+                <div class="accordion-header" role="button" aria-expanded="false" tabindex="0">
+                    <button class="accordion-button">
+                        האם יש התחייבות כספית בהצטרפות לקבוצת רכישה?
+                        <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="accordion-content" aria-hidden="true">
+                        <p>לא, אין שום התחייבות כספית בשלב ההצטרפות. התשלום מתבצע רק לאחר סגירת הקבוצה ורק אם אתם מעוניינים להמשיך ברכישה לאחר שראיתם את המחיר הסופי.</p>
+                    </div>
+                </div>
+                <div class="accordion-header" role="button" aria-expanded="false" tabindex="0">
+                    <button class="accordion-button">
+                        איך עובד מנגנון "חבר מביא חבר"?
+                        <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="accordion-content" aria-hidden="true">
+                        <p>כל משתמש מקבל קישור אישי. כאשר חבר נרשם דרך הקישור שלכם ומבצע רכישה, אתם מקבלים החזר של 150 ₪ לכל רכישה שהושלמה. ההחזר מתבצע לאחר השלמת העסקה.</p>
+                    </div>
+                </div>
+                <div class="accordion-header" role="button" aria-expanded="false" tabindex="0">
+                    <button class="accordion-button">
+                        מה קורה אם לא מצטרפים מספיק אנשים לקבוצה?
+                        <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="accordion-content" aria-hidden="true">
+                        <p>אם לא מצטרפים מספיק אנשים, יש שתי אפשרויות: או שנמשיך לחכות עד שיצטרפו עוד אנשים, או שנציע לכם לרכוש במחיר הנוכחי. בכל מקרה, אתם לא מחויבים לרכוש אם המחיר לא מתאים לכם.</p>
+                    </div>
+                </div>
+                <div class="accordion-header" role="button" aria-expanded="false" tabindex="0">
+                    <button class="accordion-button">
+                        כיצד מתבצע המשלוח?
+                        <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="accordion-content" aria-hidden="true">
+                        <p>המשלוח מתבצע ישירות לכתובת שהזנתם בעת ההרשמה. זמני האספקה משתנים בהתאם למוצר ולמלאי, אך בדרך כלל נעים בין 7-14 ימי עסקים. עלות המשלוח כלולה במחיר המוצר.</p>
+                    </div>
+                </div>
+                <div class="accordion-header" role="button" aria-expanded="false" tabindex="0">
+                    <button class="accordion-button">
+                        האם יש אחריות על המוצרים?
+                        <span class="accordion-icon"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="accordion-content" aria-hidden="true">
+                        <p>כן, כל המוצרים מגיעים עם אחריות מלאה של היבואן הרשמי בישראל. תקופת האחריות משתנה בהתאם למוצר ומפורטת בדף המוצר.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">לקוחות מספרים</h2>
+            <div class="testimonials-slider" role="region" aria-label="ביקורות לקוחות">
+                <div class="testimonial-card">
+                    <div class="testimonial-image skeleton-loading">
+                        <img data-src="images/testimonials/person1.jpg" alt="שם הלקוח" class="lazy-load">
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"חסכתי מעל 700 ₪ על מכונת כביסה חדשה! התהליך היה פשוט וקל, והמוצר הגיע בדיוק כמו שהובטח. ממליצה בחום!"</p>
+                        <p class="testimonial-author">- מיכל כהן, תל אביב</p>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-image skeleton-loading">
+                        <img data-src="images/testimonials/person2.jpg" alt="שם הלקוח" class="lazy-load">
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"הצטרפתי לקבוצת רכישה של מקרר, וגם שיתפתי עם חברים. לא רק שחסכתי על המקרר, אלא גם קיבלתי 300 ₪ מהפניות. מדהים!"</p>
+                        <p class="testimonial-author">- יוסי לוי, חיפה</p>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-image skeleton-loading">
+                        <img data-src="images/testimonials/person3.jpg" alt="שם הלקוח" class="lazy-load">
+                    </div>
+                    <div class="testimonial-content">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <p class="testimonial-text">"בתור בעל עסק קטן, הצלחתי לרכוש ציוד משרדי במחיר סיטונאי דרך קונים חכם. חסכתי אלפי שקלים והשירות היה מעולה."</p>
+                        <p class="testimonial-author">- דני אברהם, ירושלים</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-dots" role="tablist" aria-label="ניווט בין ביקורות">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- About VIPO Section -->
+    <section id="about-vipo" class="about-vipo">
+        <div class="container">
+            <h2 class="section-title">אודות VIPO</h2>
+            <div class="about-content">
+                <div class="about-image skeleton-loading">
+                    <img data-src="images/vipo-logo.png" alt="VIPO" class="lazy-load">
+                </div>
+                <div class="about-text">
+                    <p>VIPO הינה חברה ישראלית עם נוכחות בסין המתמחה ביבוא ישיר של מוצרים איכותיים במחירים אטרקטיביים. אנו מפעילים מערך לוגיסטי מתקדם המאפשר לנו להביא מוצרים ישירות מהיצרנים אל הצרכן הסופי, ללא פערי תיווך.</p>
+                    <p>החברה הוקמה בשנת 2018 ומאז סיפקה מוצרים לאלפי לקוחות מרוצים בישראל. הצוות שלנו כולל מומחי רכש, אנשי לוגיסטיקה ונציגי שירות לקוחות המחויבים להבטיח חוויית קנייה מושלמת.</p>
+                    <p>באמצעות פלטפורמת "קונים חכם", אנו מציעים לכם את האפשרות ליהנות מכוח הקנייה המשותף ולרכוש מוצרים במחירים שלא תמצאו בשום מקום אחר.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer & Contact Section -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/logo-white.png" alt="קונים חכם">
+                    <p>רכישה קבוצתית חכמה</p>
+                </div>
+                <div class="footer-links">
+                    <h3>ניווט מהיר</h3>
+                    <ul>
+                        <li><a href="#hero">דף הבית</a></li>
+                        <li><a href="#how-it-works">איך זה עובד?</a></li>
+                        <li><a href="#price-table">טבלת מחירים</a></li>
+                        <li><a href="#faq">שאלות נפוצות</a></li>
+                        <li><a href="#about-vipo">אודות</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>צור קשר</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+972501234567" aria-label="מספר טלפון">050-123-4567</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:info@konim-hacham.co.il" aria-label="כתובת אימייל">info@konim-hacham.co.il</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> רח' הרצל 100, תל אביב</li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h3>עקבו אחרינו</h3>
+                    <div class="social-icons">
+                        <a href="#" aria-label="פייסבוק"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="אינסטגרם"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="טוויטר"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="לינקדאין"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 קונים חכם. כל הזכויות שמורות.</p>
+                <div class="footer-legal">
+                    <a href="#">תנאי שימוש</a>
+                    <a href="#">מדיניות פרטיות</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://chat.whatsapp.com/KP5UIdBHiKdGmOdyWeJySa?mode=ac_t" class="whatsapp-button" aria-label="צור קשר בוואטסאפ" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Cookie Consent -->
+    <div class="cookie-consent" id="cookieConsent" role="alert" aria-live="polite">
+        <p>אתר זה משתמש בעוגיות כדי להבטיח לך את החוויה הטובה ביותר.</p>
+        <div class="cookie-buttons">
+            <button class="btn btn-accept" id="acceptCookies">אישור</button>
+            <button class="btn btn-secondary" id="declineCookies">דחייה</button>
+        </div>
+    </div>
+
+    <!-- Support Bot (placeholder for external script) -->
+    <div id="support-bot-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/lazy-load.js"></script>
+    <script src="js/register-sw.js"></script>
+    
+    <!-- Analytics (commented out for now) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script> -->
+</body>
+</html>

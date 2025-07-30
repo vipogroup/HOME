@@ -1,0 +1,263 @@
+/* Responsive Styles */
+
+/* Tablets and smaller desktops */
+@media (max-width: 992px) {
+    .container {
+        max-width: 95%;
+    }
+    
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    
+    .about-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .about-image {
+        margin-bottom: 20px;
+    }
+    
+    .footer-content {
+        gap: 20px;
+    }
+    
+    section {
+        padding: 35px 0;
+    }
+    
+    .section-title {
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+    /* Navbar mobile styling */
+    .menu-toggle {
+        display: block;
+    }
+    
+    .nav-menu {
+        position: fixed;
+        right: -100%;
+        top: 55px;
+        flex-direction: column;
+        background-color: var(--primary-color);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+        padding: 15px 0;
+    }
+    
+    .nav-menu.active {
+        right: 0;
+    }
+    
+    .nav-menu li {
+        margin: 12px 0;
+    }
+    
+    /* Hero section mobile styling */
+    .hero {
+        padding: 60px 0 20px;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+    }
+    
+    .cta-buttons {
+        flex-direction: row; /* שינוי לשורה במקום עמודה */
+        gap: 10px;
+    }
+    
+    .btn {
+        padding: 7px 14px;
+        font-size: 0.85rem;
+    }
+    
+    /* Products slider mobile styling */
+    .product-card {
+        flex: 0 0 200px;
+    }
+    
+    .hot-products-slider h2 {
+        font-size: 1.3rem;
+    }
+    
+    /* Step styling - כבר מותאם לגלילה אופקית */
+    
+    /* Section padding for mobile */
+    section {
+        padding: 30px 0;
+    }
+    
+    /* Price table mobile styling */
+    .price-table-container {
+        max-width: 100%;
+    }
+    
+    .price-row {
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+    
+    /* FAQ mobile styling */
+    .accordion-button {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+    
+    /* Testimonial cards mobile styling */
+    .testimonial-card {
+        flex-direction: column;
+    }
+    
+    .testimonial-image {
+        height: 120px;
+    }
+    
+    .testimonial-content {
+        padding: 15px;
+    }
+    
+    .section-title {
+        margin-bottom: 15px;
+        font-size: 1.4rem;
+        padding-bottom: 8px;
+    }
+    
+    .section-title::after {
+        width: 60px;
+        height: 2px;
+    }
+    
+    /* Footer mobile styling */
+    .footer {
+        padding: 30px 0 15px;
+    }
+    
+    .footer h3 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .footer-content {
+        justify-content: space-around;
+    }
+    
+    .footer-logo, .footer-links, .footer-contact, .footer-social {
+        min-width: 150px;
+        margin-bottom: 20px;
+    }
+    
+    /* WhatsApp button mobile styling */
+    .whatsapp-button {
+        width: 45px;
+        height: 45px;
+        bottom: 15px;
+        left: 15px;
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile testimonials and footer */
+@media (max-width: 768px) {
+    .testimonial-image {
+        height: 200px;
+        flex: none;
+        width: 100%;
+    }
+    
+    /* Footer mobile styling */
+    .footer-content {
+        flex-direction: column;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .footer-legal {
+        justify-content: center;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .product-card {
+        flex: 0 0 90%;
+    }
+    
+    .price-row {
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+    
+    .accordion-button {
+        font-size: 1rem;
+        padding: 15px;
+    }
+    
+    .whatsapp-button {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        bottom: 20px;
+        left: 20px;
+    }
+    
+    .cookie-consent {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+
+/* RTL specific adjustments */
+@media (max-width: 768px) {
+    .nav-menu {
+        right: auto;
+        left: -100%;
+    }
+    
+    .nav-menu.active {
+        right: auto;
+        left: 0;
+    }
+    
+    /* Adjust the WhatsApp button position for RTL on mobile */
+    .whatsapp-button {
+        left: auto;
+        right: 20px;
+    }
+}
