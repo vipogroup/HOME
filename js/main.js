@@ -1,5 +1,10 @@
 // Main JavaScript File
 
+// Scroll to top on page refresh/load
+window.addEventListener('load', function() {
+    window.scrollTo(0, 0);
+});
+
 // DOM Elements
 const mobileMenu = document.getElementById('mobile-menu');
 const navMenu = document.querySelector('.nav-menu');
