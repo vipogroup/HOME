@@ -1,92 +1,171 @@
 // Slider functionality
 
-// Products Slider
+// Products Slider - Infinite Circular Carousel
 document.addEventListener('DOMContentLoaded', function() {
-    // Products slider
-    const productsContainer = document.querySelector('.products-container');
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
+    console.log('Slider.js loaded');
     
-    if (productsContainer && prevBtn && nextBtn) {
-        // Get all product cards
-        const productCards = document.querySelectorAll('.product-card');
-        let cardWidth = 0;
-        let scrollPosition = 0;
-        let autoScrollInterval;
-        
-        // Calculate card width including margin
-        if (productCards.length > 0) {
-            const cardStyle = window.getComputedStyle(productCards[0]);
-            cardWidth = productCards[0].offsetWidth + parseInt(cardStyle.marginRight);
-        }
-        
-        // Previous button click handler
-        prevBtn.addEventListener('click', () => {
-            scrollPosition = Math.max(scrollPosition - cardWidth, 0);
-            productsContainer.scroll({
-                left: scrollPosition,
-                behavior: 'smooth'
-            });
-            resetAutoScroll();
-        });
-        
-        // Next button click handler
-        nextBtn.addEventListener('click', () => {
-            scrollPosition = Math.min(scrollPosition + cardWidth, productsContainer.scrollWidth - productsContainer.clientWidth);
-            productsContainer.scroll({
-                left: scrollPosition,
-                behavior: 'smooth'
-            });
-            resetAutoScroll();
-        });
-        
-        // Auto-scroll functionality
-        function startAutoScroll() {
-            autoScrollInterval = setInterval(() => {
-                if (scrollPosition >= productsContainer.scrollWidth - productsContainer.clientWidth) {
-                    scrollPosition = 0;
-                } else {
-                    scrollPosition += cardWidth;
-                }
-                
-                productsContainer.scroll({
-                    left: scrollPosition,
-                    behavior: 'smooth'
-                });
-            }, 5000); // Auto-scroll every 5 seconds
-        }
-        
-        // Reset auto-scroll timer after user interaction
-        function resetAutoScroll() {
-            clearInterval(autoScrollInterval);
-            startAutoScroll();
-        }
-        
-        // Start auto-scroll on page load
-        startAutoScroll();
-        
-        // Stop auto-scroll when user interacts with the slider
-        productsContainer.addEventListener('mouseenter', () => {
-            clearInterval(autoScrollInterval);
-        });
-        
-        // Resume auto-scroll when user stops interacting
-        productsContainer.addEventListener('mouseleave', () => {
-            startAutoScroll();
-        });
-        
-        // Update card width on window resize
-        window.addEventListener('resize', () => {
-            if (productCards.length > 0) {
-                const cardStyle = window.getComputedStyle(productCards[0]);
-                cardWidth = productCards[0].offsetWidth + parseInt(cardStyle.marginRight);
-            }
+    const originalCards = Array.from(document.querySelectorAll('.product-card'));
+    
+    if (originalCards.length === 0) {
+        console.log('No product cards found');
+        return;
+    }
+    
+    console.log('Found', originalCards.length, 'original product cards');
+    
+    // Clone entire set 3 times for infinite effect
+    const container = document.querySelector('.products-container');
+    const allLinks = Array.from(container.querySelectorAll('.product-card-link'));
+    
+    // Clone the entire set 2 more times (so we have 3 complete sets)
+    for (let i = 0; i < 2; i++) {
+        allLinks.forEach(link => {
+            const clone = link.cloneNode(true);
+            container.appendChild(clone);
         });
     }
     
+    // Get all cards including clones
+    const productCards = Array.from(document.querySelectorAll('.product-card'));
+    console.log('Total cards after cloning:', productCards.length);
+    
+    // Start from middle set (כורסת עיסוי in second set)
+    let currentIndex = originalCards.length + 1;
+    
+    function showCards() {
+        const total = productCards.length;
+        
+        productCards.forEach((card, i) => {
+            // Remove all classes
+            card.classList.remove('center', 'side', 'far');
+            
+            // Force reflow to ensure CSS updates
+            void card.offsetWidth;
+            
+            // Check if this is the center card
+            if (i === currentIndex) {
+                card.classList.add('center');
+                console.log('Center card index:', i, '- Name:', card.querySelector('h3').textContent);
+            } 
+            // Check if this is next card (right side)
+            else if (i === (currentIndex + 1) % total) {
+                card.classList.add('side');
+            }
+            // Check if this is previous card (left side)
+            else if (i === (currentIndex - 1 + total) % total) {
+                card.classList.add('side');
+            }
+            // All other cards are far
+            else {
+                card.classList.add('far');
+            }
+        });
+        
+        // Force browser to recalculate styles
+        document.body.offsetHeight;
+    }
+    
+    function nextCard() {
+        currentIndex = (currentIndex + 1) % productCards.length;
+        console.log('Moving to index:', currentIndex);
+        showCards();
+    }
+    
+    // Initialize - force immediate display
+    console.log('Initializing carousel...');
+    setTimeout(() => {
+        showCards();
+        console.log('Initial display set');
+    }, 0);
+    
+    // Auto-rotate every 2 seconds
+    let autoRotateInterval = setInterval(nextCard, 2000);
+    
+    // Manual swipe/drag functionality
+    let startX = 0;
+    let isDragging = false;
+    
+    function prevCard() {
+        currentIndex = (currentIndex - 1 + productCards.length) % productCards.length;
+        console.log('Moving to index:', currentIndex);
+        showCards();
+    }
+    
+    // Touch events for mobile
+    container.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        clearInterval(autoRotateInterval);
+    });
+    
+    container.addEventListener('touchend', (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > 50) { // Minimum swipe distance
+            if (diff > 0) {
+                nextCard(); // Swipe left - next
+            } else {
+                prevCard(); // Swipe right - previous
+            }
+        }
+        
+        // Restart auto-rotation after 3 seconds
+        setTimeout(() => {
+            autoRotateInterval = setInterval(nextCard, 2000);
+        }, 3000);
+    });
+    
+    // Mouse events for desktop
+    container.addEventListener('mousedown', (e) => {
+        startX = e.clientX;
+        isDragging = true;
+        clearInterval(autoRotateInterval);
+        container.style.cursor = 'grabbing';
+    });
+    
+    container.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+    });
+    
+    container.addEventListener('mouseup', (e) => {
+        if (!isDragging) return;
+        
+        const endX = e.clientX;
+        const diff = startX - endX;
+        
+        if (Math.abs(diff) > 50) { // Minimum drag distance
+            if (diff > 0) {
+                nextCard(); // Drag left - next
+            } else {
+                prevCard(); // Drag right - previous
+            }
+        }
+        
+        isDragging = false;
+        container.style.cursor = 'grab';
+        
+        // Restart auto-rotation after 3 seconds
+        setTimeout(() => {
+            autoRotateInterval = setInterval(nextCard, 2000);
+        }, 3000);
+    });
+    
+    container.addEventListener('mouseleave', () => {
+        if (isDragging) {
+            isDragging = false;
+            container.style.cursor = 'grab';
+        }
+    });
+    
+    // Set initial cursor
+    container.style.cursor = 'grab';
+    
+    console.log('Carousel initialized with manual controls');
+    
     // Testimonials slider
     const testimonialCards = document.querySelectorAll('.testimonial-card');
-    const dots = document.querySelectorAll('.dot');
+    const dots = document.querySelectorAll('.slider-dots .dot');
     let currentSlide = 0;
     let testimonialInterval;
     

@@ -8,6 +8,7 @@ window.addEventListener('load', function() {
 // DOM Elements
 const mobileMenu = document.getElementById('mobile-menu');
 const navMenu = document.querySelector('.nav-menu');
+const closeMenu = document.getElementById('close-menu');
 const accordionButtons = document.querySelectorAll('.accordion-button');
 const copyLinkBtn = document.getElementById('copy-link-btn');
 const referralLink = document.getElementById('referral-link');
@@ -25,6 +26,14 @@ if (mobileMenu) {
     mobileMenu.addEventListener('click', () => {
         mobileMenu.classList.toggle('active');
         navMenu.classList.toggle('active');
+    });
+}
+
+// Close Menu Button
+if (closeMenu) {
+    closeMenu.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        navMenu.classList.remove('active');
     });
 }
 
@@ -189,6 +198,20 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Scroll arrow functionality
+const scrollArrow = document.querySelector('.scroll-arrow');
+if (scrollArrow) {
+    scrollArrow.addEventListener('click', () => {
+        const videoSection = document.getElementById('video-section');
+        if (videoSection) {
+            window.scrollTo({
+                top: videoSection.offsetTop - 80,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
+
 // Track CTA clicks for analytics
 document.querySelectorAll('.btn-primary, .btn-secondary').forEach(button => {
     button.addEventListener('click', function() {
@@ -224,4 +247,91 @@ document.addEventListener('DOMContentLoaded', function() {
         earnings.textContent = demoEarnings;
         meterProgress.style.width = progressPercent + '%';
     }
+    
+    // Newsletter form handling
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const emailInput = this.querySelector('input[type="email"]');
+            const submitBtn = this.querySelector('button');
+            
+            if (emailInput && emailInput.value) {
+                // Show success feedback
+                const originalBtnContent = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-check"></i>';
+                submitBtn.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalBtnContent;
+                    submitBtn.style.background = '';
+                    emailInput.value = '';
+                }, 2000);
+                
+                // Track newsletter signup for analytics
+                if (typeof gtag === 'function') {
+                    gtag('event', 'newsletter_signup', {
+                        'event_category': 'engagement',
+                        'event_label': 'footer newsletter'
+                    });
+                }
+            }
+        });
+    }
+    
+    // FAQ Accordion
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.nextElementSibling;
+            const isActive = question.classList.contains('active');
+            
+            // Close all other FAQs
+            faqQuestions.forEach(q => {
+                q.classList.remove('active');
+                q.nextElementSibling.classList.remove('active');
+            });
+            
+            // Toggle current FAQ
+            if (!isActive) {
+                question.classList.add('active');
+                answer.classList.add('active');
+            }
+        });
+    });
+    
+    // Testimonials Slider
+    const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+    const testimonialDots = document.querySelectorAll('.testimonial-dot');
+    let currentTestimonial = 0;
+    
+    function showTestimonial(index) {
+        testimonialSlides.forEach(slide => slide.classList.remove('active'));
+        testimonialDots.forEach(dot => dot.classList.remove('active'));
+        
+        testimonialSlides[index].classList.add('active');
+        testimonialDots[index].classList.add('active');
+    }
+    
+    function nextTestimonial() {
+        currentTestimonial = (currentTestimonial + 1) % testimonialSlides.length;
+        showTestimonial(currentTestimonial);
+    }
+    
+    // Auto-advance every 5 seconds
+    if (testimonialSlides.length > 0) {
+        setInterval(nextTestimonial, 5000);
+        
+        // Dot click handlers
+        testimonialDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentTestimonial = index;
+                showTestimonial(currentTestimonial);
+            });
+        });
+    }
+    
+    // Product Cards Auto-Rotation is handled in slider.js
 });

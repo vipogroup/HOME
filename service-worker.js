@@ -1,19 +1,20 @@
 // Service Worker for PWA Support
 
-const CACHE_NAME = 'konim-hacham-v1';
+const CACHE_NAME = 'konim-hacham-v2';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/css/style.css',
-  '/css/responsive.css',
-  '/js/main.js',
-  '/js/slider.js',
-  '/js/lazy-load.js',
-  '/images/logo.png',
-  '/images/logo-white.png',
-  '/images/hero-bg.jpg',
-  '/images/video-thumbnail.jpg',
-  '/manifest.json'
+  './',
+  './index.html',
+  './404.html',
+  './500.html',
+  './css/style.css',
+  './css/responsive.css',
+  './css/accessibility.css',
+  './js/main.js',
+  './js/slider.js',
+  './js/lazy-load.js',
+  './js/register-sw.js',
+  './images/1.jpg',
+  './manifest.json'
 ];
 
 // Install event - cache assets
