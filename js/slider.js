@@ -3,19 +3,19 @@
 // Products Slider - Infinite Circular Carousel
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Slider.js loaded');
-    
+
     const originalCards = Array.from(document.querySelectorAll('.product-card'));
-    
+
     if (originalCards.length === 0) {
         console.log('No product cards found');
         return;
     }
-    
+
     console.log('Found', originalCards.length, 'original product cards');
-    
+
     // Clone entire set 3 times for infinite effect
     const container = document.querySelector('.products-container');
-    
+
     if (!container) {
         console.log('Products container not found');
         return;
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             clearInterval(autoScrollTimer);
             autoScrollTimer = setInterval(() => {
                 centerCard(activeIndex + 1, true);
-            }, 3000);
+            }, 2200);
         }
 
         function stopAutoScroll() {
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(restartTimer);
             restartTimer = setTimeout(() => {
                 startAutoScroll();
-            }, 2000);
+            }, 1500);
         }
 
         const interactionEvents = ['touchstart', 'mousedown', 'pointerdown'];
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
     container.classList.remove('mobile-carousel');
 
     const allLinks = Array.from(container.querySelectorAll('.product-card-link'));
-    
+
     // Clone the entire set 2 more times (so we have 3 complete sets)
     for (let i = 0; i < 2; i++) {
         allLinks.forEach(link => {
@@ -171,15 +171,15 @@ document.addEventListener('DOMContentLoaded', function() {
             container.appendChild(clone);
         });
     }
-    
+
     // Get all cards including clones
     const productCards = Array.from(document.querySelectorAll('.product-card'));
     console.log('Total cards after cloning:', productCards.length);
-    
+
     // Start from middle set (כורסת עיסוי in second set)
     const startIndex = originalCards.length;
     let currentIndex = startIndex + Math.floor(originalCards.length / 2);
-    
+
     function loadCardImages(card) {
         const img = card.querySelector('img.lazy-load');
         if (img && !img.getAttribute('src')) {
@@ -192,36 +192,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showCards() {
         const total = productCards.length;
-        
+
         productCards.forEach((card, i) => {
             // Remove all classes
             card.classList.remove('center', 'side', 'far');
-            
+
             // Force reflow to ensure CSS updates
             void card.offsetWidth;
-            
+
             // Check if this is the center card
             if (i === currentIndex) {
                 card.classList.add('center');
                 loadCardImages(card);
                 console.log('Center card index:', i, '- Name:', card.querySelector('h3').textContent);
-            } 
-            // Check if this is next card (right side)
-            else if (i === (currentIndex + 1) % total) {
+            } else if (i === (currentIndex + 1) % total) {
+                // Next card (right side)
                 card.classList.add('side');
                 loadCardImages(card);
-            }
-            // Check if this is previous card (left side)
-            else if (i === (currentIndex - 1 + total) % total) {
+            } else if (i === (currentIndex - 1 + total) % total) {
+                // Previous card (left side)
                 card.classList.add('side');
                 loadCardImages(card);
-            }
-            // All other cards are far
-            else {
+            } else {
+                // All other cards are farther away
                 card.classList.add('far');
             }
         });
-        
+
         const wrapper = container.parentElement;
         const centerCard = productCards[currentIndex];
         if (!wrapper || !centerCard) {
@@ -235,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const offset = wrapperCenter - cardCenter;
         container.style.transform = `translateX(${offset}px)`;
     }
-    
+
     function nextCard() {
         currentIndex = (currentIndex + 1) % productCards.length;
         if (currentIndex >= startIndex + originalCards.length) {
@@ -250,25 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Moving to index:', currentIndex);
         showCards();
     }
-    
-    // Initialize - force immediate display
-    console.log('Initializing carousel...');
-    setTimeout(() => {
-        container.classList.add('no-transition');
-        showCards();
-        requestAnimationFrame(() => {
-            container.classList.remove('no-transition');
-        });
-        console.log('Initial display set');
-    }, 0);
-    
-    // Auto-rotate every 2 seconds
-    let autoRotateInterval = setInterval(nextCard, 2000);
-    
-    // Manual swipe/drag functionality
-    let startX = 0;
-    let isDragging = false;
-    
+
     function prevCard() {
         currentIndex = (currentIndex - 1 + productCards.length) % productCards.length;
         if (currentIndex < startIndex) {
@@ -283,33 +262,51 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Moving to index:', currentIndex);
         showCards();
     }
-    
+
+    // Initialize - force immediate display
+    console.log('Initializing carousel...');
+    setTimeout(() => {
+        container.classList.add('no-transition');
+        showCards();
+        requestAnimationFrame(() => {
+            container.classList.remove('no-transition');
+        });
+        console.log('Initial display set');
+    }, 0);
+
+    // Auto-rotate every ~1.8 seconds for a snappier feel
+    let autoRotateInterval = setInterval(nextCard, 1800);
+
+    // Manual swipe/drag functionality
+    let startX = 0;
+    let isDragging = false;
+
     // Touch events for mobile
     container.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
         clearInterval(autoRotateInterval);
         container.classList.add('no-transition');
     });
-    
+
     container.addEventListener('touchend', (e) => {
         const endX = e.changedTouches[0].clientX;
         const diff = startX - endX;
-        
-        if (Math.abs(diff) > 50) { // Minimum swipe distance
+
+        if (Math.abs(diff) > 50) {
             if (diff > 0) {
                 nextCard(); // Swipe left - next
             } else {
                 prevCard(); // Swipe right - previous
             }
         }
-        
+
         container.classList.remove('no-transition');
-        // Restart auto-rotation after 3 seconds
+        // Restart auto-rotation after short pause
         setTimeout(() => {
-            autoRotateInterval = setInterval(nextCard, 2000);
-        }, 3000);
+            autoRotateInterval = setInterval(nextCard, 1800);
+        }, 2200);
     });
-    
+
     // Mouse events for desktop
     container.addEventListener('mousedown', (e) => {
         startX = e.clientX;
@@ -318,36 +315,40 @@ document.addEventListener('DOMContentLoaded', function() {
         container.style.cursor = 'grabbing';
         container.classList.add('no-transition');
     });
-    
+
     container.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
+        if (!isDragging) {
+            return;
+        }
         e.preventDefault();
     });
-    
+
     container.addEventListener('mouseup', (e) => {
-        if (!isDragging) return;
-        
+        if (!isDragging) {
+            return;
+        }
+
         const endX = e.clientX;
         const diff = startX - endX;
-        
-        if (Math.abs(diff) > 50) { // Minimum drag distance
+
+        if (Math.abs(diff) > 50) {
             if (diff > 0) {
                 nextCard(); // Drag left - next
             } else {
                 prevCard(); // Drag right - previous
             }
         }
-        
+
         isDragging = false;
         container.style.cursor = 'grab';
         container.classList.remove('no-transition');
-        
-        // Restart auto-rotation after 3 seconds
+
+        // Restart auto-rotation after short pause
         setTimeout(() => {
-            autoRotateInterval = setInterval(nextCard, 2000);
-        }, 3000);
+            autoRotateInterval = setInterval(nextCard, 1800);
+        }, 2200);
     });
-    
+
     container.addEventListener('mouseleave', () => {
         if (isDragging) {
             isDragging = false;
@@ -355,65 +356,57 @@ document.addEventListener('DOMContentLoaded', function() {
             container.classList.remove('no-transition');
         }
     });
-    
+
     // Set initial cursor
     container.style.cursor = 'grab';
-    
+
     console.log('Carousel initialized with manual controls');
-    
+
     // Testimonials slider
     const testimonialCards = document.querySelectorAll('.testimonial-card');
     const dots = document.querySelectorAll('.slider-dots .dot');
     let currentSlide = 0;
     let testimonialInterval;
-    
+
     function showSlide(index) {
-        // Hide all testimonials
         testimonialCards.forEach(card => {
             card.style.display = 'none';
         });
-        
-        // Remove active class from all dots
+
         dots.forEach(dot => {
             dot.classList.remove('active');
         });
-        
-        // Show the selected testimonial
+
         if (testimonialCards[index]) {
             testimonialCards[index].style.display = 'flex';
             dots[index].classList.add('active');
         }
     }
-    
-    // Initialize testimonials slider
+
     if (testimonialCards.length > 0 && dots.length > 0) {
-        // Show first slide by default
         showSlide(0);
-        
-        // Add click event to dots
+
         dots.forEach(dot => {
             dot.addEventListener('click', function() {
-                const slideIndex = parseInt(this.getAttribute('data-index'));
+                const slideIndex = parseInt(this.getAttribute('data-index'), 10);
                 showSlide(slideIndex);
                 currentSlide = slideIndex;
                 resetTestimonialInterval();
             });
         });
-        
-        // Auto-rotate testimonials
+
         function startTestimonialInterval() {
             testimonialInterval = setInterval(() => {
                 currentSlide = (currentSlide + 1) % testimonialCards.length;
                 showSlide(currentSlide);
             }, 6000); // Change testimonial every 6 seconds
         }
-        
+
         function resetTestimonialInterval() {
             clearInterval(testimonialInterval);
             startTestimonialInterval();
         }
-        
-        // Start auto-rotation
+
         startTestimonialInterval();
     }
 });

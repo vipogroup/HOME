@@ -17,6 +17,8 @@ const cookieConsent = document.getElementById('cookieConsent');
 const acceptCookiesBtn = document.getElementById('acceptCookies');
 const declineCookiesBtn = document.getElementById('declineCookies');
 const videoEmbed = document.querySelector('.video-embed');
+const referralInfoToggle = document.getElementById('referralInfoToggle');
+const referralInfoPanel = document.getElementById('referral-info-panel');
 // האלמנטים הבאים הוסרו מהדף והוחלפו בתג וידאו ישיר
 // const videoPlaceholder = document.querySelector('.video-placeholder');
 // const playButton = document.querySelector('.play-button');
@@ -26,6 +28,16 @@ if (mobileMenu) {
     mobileMenu.addEventListener('click', () => {
         mobileMenu.classList.toggle('active');
         navMenu.classList.toggle('active');
+    });
+}
+
+// Referral explainer toggle
+if (referralInfoToggle && referralInfoPanel) {
+    referralInfoToggle.addEventListener('click', () => {
+        const isOpen = referralInfoPanel.classList.toggle('open');
+        referralInfoToggle.classList.toggle('active', isOpen);
+        referralInfoToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        referralInfoPanel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
     });
 }
 
@@ -69,37 +81,23 @@ accordionButtons.forEach(button => {
     });
 });
 
-// Copy referral link functionality
-if (copyLinkBtn && referralLink) {
+// Referral agent registration CTA
+if (copyLinkBtn) {
     copyLinkBtn.addEventListener('click', () => {
-        referralLink.select();
-        referralLink.setSelectionRange(0, 99999); // For mobile devices
-        
-        try {
-            // Copy the text to clipboard
-            document.execCommand('copy');
-            // Or use the newer API if available
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(referralLink.value);
-            }
-            
-            // Show tooltip
+        window.open('http://localhost:3001/', '_blank', 'noopener');
+
+        if (copyTooltip) {
             copyTooltip.classList.add('show');
-            
-            // Hide tooltip after 2 seconds
             setTimeout(() => {
                 copyTooltip.classList.remove('show');
             }, 2000);
-            
-            // Track copy event for analytics
-            if (typeof gtag === 'function') {
-                gtag('event', 'copy_referral_link', {
-                    'event_category': 'engagement',
-                    'event_label': 'referral link copied'
-                });
-            }
-        } catch (err) {
-            console.error('Failed to copy text: ', err);
+        }
+
+        if (typeof gtag === 'function') {
+            gtag('event', 'referral_agent_signup_click', {
+                event_category: 'engagement',
+                event_label: 'referral agent signup'
+            });
         }
     });
 }
@@ -161,13 +159,12 @@ if (cookieConsent && acceptCookiesBtn && declineCookiesBtn) {
 
 // Scroll animation for elements
 function animateOnScroll() {
-    const elements = document.querySelectorAll('.step, .audience-card, .info-box, .testimonial-card');
-    
+    const elements = document.querySelectorAll('.reveal-on-scroll');
+    const screenPosition = window.innerHeight * 0.8;
+
     elements.forEach(element => {
-        const elementPosition = element.getBoundingClientRect().top;
-        const screenPosition = window.innerHeight / 1.3;
-        
-        if (elementPosition < screenPosition) {
+        const elementTop = element.getBoundingClientRect().top;
+        if (elementTop < screenPosition) {
             element.classList.add('fade-in');
         }
     });
@@ -224,12 +221,93 @@ document.querySelectorAll('.btn-primary, .btn-secondary').forEach(button => {
     });
 });
 
+// Magnetic button effect
+const magneticBtn = document.getElementById('magneticBtn');
+if (magneticBtn) {
+    magneticBtn.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        
+        const moveX = x * 0.15;
+        const moveY = y * 0.15;
+        
+        this.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+    
+    magneticBtn.addEventListener('mouseleave', function() {
+        this.style.transform = 'translate(0, 0)';
+    });
+}
+
+// Counter animation for stats
+function animateCounter(element, target, duration = 2000) {
+    const start = 0;
+    const increment = target / (duration / 16);
+    let current = start;
+    
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            element.textContent = target.toLocaleString('he-IL');
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(current).toLocaleString('he-IL');
+        }
+    }, 16);
+}
+
+// 3D Tilt effect for audience cards
+function init3DTilt() {
+    const cards = document.querySelectorAll('.audience-card');
+    
+    cards.forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+        });
+    });
+}
+
 // Initialize page on load
 document.addEventListener('DOMContentLoaded', function() {
     // Open first FAQ item by default
     if (accordionButtons.length > 0) {
         accordionButtons[0].click();
     }
+    
+    // Initialize 3D tilt effect
+    init3DTilt();
+    
+    // Animate stat counters when in view
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+                entry.target.classList.add('counted', 'counting');
+                const text = entry.target.textContent.replace(/[^0-9]/g, '');
+                const target = parseInt(text);
+                if (!isNaN(target)) {
+                    animateCounter(entry.target, target);
+                }
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    statNumbers.forEach(stat => statsObserver.observe(stat));
     
     // Set up demo referral metrics (for display purposes)
     const friendsCount = document.getElementById('friends-count');
@@ -291,13 +369,20 @@ document.addEventListener('DOMContentLoaded', function() {
             // Close all other FAQs
             faqQuestions.forEach(q => {
                 q.classList.remove('active');
-                q.nextElementSibling.classList.remove('active');
+                const siblingAnswer = q.nextElementSibling;
+                if (siblingAnswer) {
+                    siblingAnswer.classList.remove('active');
+                    siblingAnswer.style.maxHeight = '0';
+                }
             });
             
             // Toggle current FAQ
             if (!isActive) {
                 question.classList.add('active');
                 answer.classList.add('active');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            } else {
+                answer.style.maxHeight = '0';
             }
         });
     });
