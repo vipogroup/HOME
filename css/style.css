@@ -345,7 +345,6 @@ img {
         -webkit-text-fill-color: transparent;
         background-clip: text;
         -webkit-text-stroke: 2px white;
-        text-stroke: 2px white;
         paint-order: stroke fill;
     }
     
@@ -640,13 +639,19 @@ img {
 
 .products-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 20px;
     padding: 10px 20px 5px 20px; /* הקטנת padding תחתון ל-5px */
     perspective: 1000px;
     position: relative;
     min-height: 300px;
+    transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+.products-container.no-transition {
+    transition: none !important;
 }
 
 .product-card {
@@ -659,23 +664,24 @@ img {
     background-origin: border-box;
     background-clip: padding-box, border-box;
     box-shadow: 0 4px 20px rgba(8, 145, 178, 0.1);
-    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease, box-shadow 0.6s ease;
     cursor: pointer;
     position: relative;
     transform-style: preserve-3d;
-    /* Default size - will be overridden by center/side/far classes */
-    width: 104px;
-    height: 116px;
-    transform: scale(0.7) translateZ(-30px);
+    /* Maintain fixed layout dimensions and animate via transforms */
+    width: 180px;
+    height: 210px;
+    flex: 0 0 180px;
+    transform: translateZ(-30px) scale(0.7);
+    transform-origin: center;
     opacity: 0.4;
     z-index: 1;
+    will-change: transform;
 }
 
 /* Center card - main focus */
 .product-card.center {
-    width: 162px;
-    height: 185px;
-    transform: scale(1.1) translateZ(50px);
+    transform: translateZ(50px) scale(1);
     opacity: 1;
     z-index: 3;
     box-shadow: 0 8px 30px rgba(8, 145, 178, 0.2);
@@ -683,24 +689,20 @@ img {
 
 /* Side cards - smaller */
 .product-card.side {
-    width: 127px;
-    height: 150px;
-    transform: scale(0.85) translateZ(0px);
+    transform: translateZ(0px) scale(0.85);
     opacity: 0.7;
     z-index: 2;
 }
 
 /* Far side cards - smallest */
 .product-card.far {
-    width: 104px;
-    height: 116px; /* הקטנת הגובה מ-220px ל-200px */
-    transform: scale(0.7) translateZ(-30px);
+    transform: translateZ(-30px) scale(0.7);
     opacity: 0.4;
     z-index: 1;
 }
 
 .product-card:hover {
-    transform: scale(1.15) translateZ(60px) rotateY(5deg);
+    transform: translateZ(60px) scale(1.12) rotateY(5deg);
     box-shadow: 0 12px 40px rgba(8, 145, 178, 0.25);
 }
 
@@ -1032,53 +1034,53 @@ img {
 /* No Commitment Section */
 .no-commitment {
     background: white;
-    padding: 30px 0;
+    padding: 20px 0;
     position: relative;
 }
 
 .info-box {
-    max-width: 600px;
+    max-width: 520px;
     margin: 0 auto;
     background: white;
-    border-radius: 16px;
-    padding: 25px 20px;
+    border-radius: 14px;
+    padding: 18px 16px;
     text-align: center;
     border: 2px solid transparent;
     background-image: linear-gradient(white, white), 
                       linear-gradient(135deg, #1e3a8a, #0891b2);
     background-origin: border-box;
     background-clip: padding-box, border-box;
-    box-shadow: 0 4px 20px rgba(8, 145, 178, 0.1);
+    box-shadow: 0 3px 16px rgba(8, 145, 178, 0.08);
 }
 
 .info-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 15px;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 12px;
     background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 20px rgba(8, 145, 178, 0.25);
+    box-shadow: 0 4px 14px rgba(8, 145, 178, 0.2);
 }
 
 .info-icon i {
-    font-size: 1.8rem;
+    font-size: 1.45rem;
     color: white;
 }
 
 .info-box h2 {
     color: #1e3a8a;
-    margin-bottom: 10px;
-    font-size: 1.4rem;
+    margin-bottom: 8px;
+    font-size: 1.25rem;
     font-weight: 700;
 }
 
 .info-box p {
     color: #4b5563;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    font-size: 0.9rem;
+    line-height: 1.45;
     margin: 0;
 }
 
@@ -1622,8 +1624,8 @@ img {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    padding: 25px 20px;
+    gap: 8px;
+    padding: 16px 14px;
     background: white;
     border-radius: 15px;
     border: 2px solid transparent;
@@ -1660,7 +1662,7 @@ img {
 }
 
 .stat-item i {
-    font-size: 2.5rem;
+    font-size: 1.9rem;
     background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1670,8 +1672,9 @@ img {
 }
 
 .stat-number {
-    font-size: 1.6rem;
-    font-weight: 800;
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 700;
     background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1681,9 +1684,14 @@ img {
 }
 
 .stat-label {
-    font-size: 0.95rem;
-    color: #6b7280;
-    font-weight: 500;
+    display: block;
+    margin-top: 2px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     position: relative;
     z-index: 1;
 }
@@ -1919,4 +1927,27 @@ img {
 a:focus, button:focus, input:focus {
     outline: 3px solid var(--secondary-color);
     outline-offset: 3px;
+}
+
+/* Mobile Optimization for About VIPO Section */
+@media (max-width: 768px) {
+    .about-stats {
+        gap: 15px;
+    }
+    
+    .stat-item {
+        padding: 15px 10px;
+    }
+    
+    .stat-item i {
+        font-size: 1.8rem;
+    }
+    
+    .stat-number {
+        font-size: 1.2rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
 }
