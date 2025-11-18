@@ -15,6 +15,153 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Clone entire set 3 times for infinite effect
     const container = document.querySelector('.products-container');
+    
+    if (!container) {
+        console.log('Products container not found');
+        return;
+    }
+
+    const isMobileView = window.matchMedia('(max-width: 768px)').matches;
+
+    function setupMobileCarousel(wrapper, cardsNodeList) {
+        const cards = Array.from(cardsNodeList);
+        const links = cards.map(card => card.closest('.product-card-link'));
+        if (cards.length === 0 || !links.every(Boolean)) {
+            console.log('Mobile carousel setup aborted - no cards or links');
+            return;
+        }
+
+        wrapper.classList.add('mobile-carousel');
+        wrapper.style.transform = 'none';
+        wrapper.scrollLeft = 0;
+
+        cards.forEach(card => {
+            loadCardImages(card);
+            card.classList.remove('center', 'side', 'far');
+        });
+
+        let activeIndex = 0;
+        let autoScrollTimer;
+        let restartTimer;
+        let scrollDebounce;
+        let isProgrammaticScroll = false;
+
+        const total = cards.length;
+
+        function applyClasses(index) {
+            cards.forEach((card, i) => {
+                card.classList.remove('center', 'side', 'far');
+                if (i === index) {
+                    card.classList.add('center');
+                } else if (i === (index + 1) % total || i === (index - 1 + total) % total) {
+                    card.classList.add('side');
+                } else {
+                    card.classList.add('far');
+                }
+            });
+        }
+
+        function centerCard(index, smooth = true) {
+            if (total === 0) {
+                return;
+            }
+
+            activeIndex = (index + total) % total;
+            applyClasses(activeIndex);
+
+            const link = links[activeIndex];
+            if (!link) {
+                return;
+            }
+
+            const containerRect = wrapper.getBoundingClientRect();
+            const linkRect = link.getBoundingClientRect();
+            const targetLeft = wrapper.scrollLeft + (linkRect.left - containerRect.left) - (containerRect.width - linkRect.width) / 2;
+
+            isProgrammaticScroll = true;
+            wrapper.scrollTo({ left: targetLeft, behavior: smooth ? 'smooth' : 'auto' });
+            setTimeout(() => {
+                isProgrammaticScroll = false;
+            }, smooth ? 400 : 0);
+        }
+
+        function startAutoScroll() {
+            if (total <= 1) {
+                return;
+            }
+            clearInterval(autoScrollTimer);
+            autoScrollTimer = setInterval(() => {
+                centerCard(activeIndex + 1, true);
+            }, 3000);
+        }
+
+        function stopAutoScroll() {
+            clearInterval(autoScrollTimer);
+        }
+
+        function scheduleAutoRestart() {
+            clearTimeout(restartTimer);
+            restartTimer = setTimeout(() => {
+                startAutoScroll();
+            }, 2000);
+        }
+
+        const interactionEvents = ['touchstart', 'mousedown', 'pointerdown'];
+        const resumeEvents = ['touchend', 'mouseup', 'pointerup', 'mouseleave'];
+
+        interactionEvents.forEach(evt => {
+            wrapper.addEventListener(evt, () => {
+                stopAutoScroll();
+                clearTimeout(restartTimer);
+            }, { passive: true });
+        });
+
+        resumeEvents.forEach(evt => {
+            wrapper.addEventListener(evt, () => {
+                scheduleAutoRestart();
+            }, { passive: true });
+        });
+
+        wrapper.addEventListener('scroll', () => {
+            if (isProgrammaticScroll) {
+                return;
+            }
+            stopAutoScroll();
+            clearTimeout(scrollDebounce);
+            scrollDebounce = setTimeout(() => {
+                const containerRect = wrapper.getBoundingClientRect();
+                const containerCenter = containerRect.left + containerRect.width / 2;
+                let closestIndex = activeIndex;
+                let minDistance = Number.POSITIVE_INFINITY;
+
+                cards.forEach((card, idx) => {
+                    const rect = card.getBoundingClientRect();
+                    const cardCenter = rect.left + rect.width / 2;
+                    const distance = Math.abs(cardCenter - containerCenter);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestIndex = idx;
+                    }
+                });
+
+                centerCard(closestIndex, true);
+                scheduleAutoRestart();
+            }, 120);
+        }, { passive: true });
+
+        requestAnimationFrame(() => {
+            centerCard(0, false);
+            startAutoScroll();
+        });
+    }
+
+    if (isMobileView) {
+        setupMobileCarousel(container, originalCards);
+        return;
+    }
+
+    container.classList.remove('mobile-carousel');
+
     const allLinks = Array.from(container.querySelectorAll('.product-card-link'));
     
     // Clone the entire set 2 more times (so we have 3 complete sets)
@@ -30,8 +177,19 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Total cards after cloning:', productCards.length);
     
     // Start from middle set (כורסת עיסוי in second set)
-    let currentIndex = originalCards.length + 1;
+    const startIndex = originalCards.length;
+    let currentIndex = startIndex + Math.floor(originalCards.length / 2);
     
+    function loadCardImages(card) {
+        const img = card.querySelector('img.lazy-load');
+        if (img && !img.getAttribute('src')) {
+            const dataSrc = img.getAttribute('data-src');
+            if (dataSrc) {
+                img.setAttribute('src', dataSrc);
+            }
+        }
+    }
+
     function showCards() {
         const total = productCards.length;
         
@@ -45,15 +203,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // Check if this is the center card
             if (i === currentIndex) {
                 card.classList.add('center');
+                loadCardImages(card);
                 console.log('Center card index:', i, '- Name:', card.querySelector('h3').textContent);
             } 
             // Check if this is next card (right side)
             else if (i === (currentIndex + 1) % total) {
                 card.classList.add('side');
+                loadCardImages(card);
             }
             // Check if this is previous card (left side)
             else if (i === (currentIndex - 1 + total) % total) {
                 card.classList.add('side');
+                loadCardImages(card);
             }
             // All other cards are far
             else {
@@ -61,12 +222,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Force browser to recalculate styles
-        document.body.offsetHeight;
+        const wrapper = container.parentElement;
+        const centerCard = productCards[currentIndex];
+        if (!wrapper || !centerCard) {
+            return;
+        }
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const cardRect = centerCard.getBoundingClientRect();
+        const wrapperCenter = wrapperRect.left + wrapperRect.width / 2;
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const offset = wrapperCenter - cardCenter;
+        container.style.transform = `translateX(${offset}px)`;
     }
     
     function nextCard() {
         currentIndex = (currentIndex + 1) % productCards.length;
+        if (currentIndex >= startIndex + originalCards.length) {
+            container.classList.add('no-transition');
+            currentIndex -= originalCards.length;
+            requestAnimationFrame(() => {
+                container.classList.remove('no-transition');
+                showCards();
+            });
+            return;
+        }
         console.log('Moving to index:', currentIndex);
         showCards();
     }
@@ -74,7 +254,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize - force immediate display
     console.log('Initializing carousel...');
     setTimeout(() => {
+        container.classList.add('no-transition');
         showCards();
+        requestAnimationFrame(() => {
+            container.classList.remove('no-transition');
+        });
         console.log('Initial display set');
     }, 0);
     
@@ -87,6 +271,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function prevCard() {
         currentIndex = (currentIndex - 1 + productCards.length) % productCards.length;
+        if (currentIndex < startIndex) {
+            container.classList.add('no-transition');
+            currentIndex += originalCards.length;
+            requestAnimationFrame(() => {
+                container.classList.remove('no-transition');
+                showCards();
+            });
+            return;
+        }
         console.log('Moving to index:', currentIndex);
         showCards();
     }
@@ -95,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
     container.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
         clearInterval(autoRotateInterval);
+        container.classList.add('no-transition');
     });
     
     container.addEventListener('touchend', (e) => {
@@ -109,6 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
+        container.classList.remove('no-transition');
         // Restart auto-rotation after 3 seconds
         setTimeout(() => {
             autoRotateInterval = setInterval(nextCard, 2000);
@@ -121,6 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
         isDragging = true;
         clearInterval(autoRotateInterval);
         container.style.cursor = 'grabbing';
+        container.classList.add('no-transition');
     });
     
     container.addEventListener('mousemove', (e) => {
@@ -144,6 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         isDragging = false;
         container.style.cursor = 'grab';
+        container.classList.remove('no-transition');
         
         // Restart auto-rotation after 3 seconds
         setTimeout(() => {
@@ -155,6 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isDragging) {
             isDragging = false;
             container.style.cursor = 'grab';
+            container.classList.remove('no-transition');
         }
     });
     

@@ -389,33 +389,50 @@
     
     .btn {
         padding: 7px 14px;
-        font-size: 0.85rem;
     }
-    
-    /* 3D Carousel mobile styling */
-    .products-container {
-        gap: 10px;
-        padding: 20px 10px;
-        min-height: 250px;
-    }
-    
-    .product-card.center {
-        width: 200px;
-        height: 250px;
-    }
-    
-    .product-card.side {
-        width: 150px;
-        height: 190px;
-    }
-    
-    .product-card.far {
-        display: none; /* Hide far cards on mobile */
-    }
-    
+
     .hot-products-slider h2 {
         font-size: 1.4rem;
         margin-bottom: 20px;
+    }
+
+    .products-container {
+        padding: 10px 12px 5px 12px;
+        gap: 12px;
+        scroll-snap-type: x mandatory;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .products-container.mobile-carousel {
+        scroll-snap-type: x mandatory;
+        overflow-x: auto;
+        justify-content: flex-start;
+        -ms-overflow-style: none;
+    }
+
+    .products-container.mobile-carousel::-webkit-scrollbar {
+        display: none;
+    }
+
+    .products-container.mobile-carousel .product-card {
+        flex: 0 0 170px;
+        width: 170px;
+        height: 220px;
+        transform: translateZ(0) scale(0.85);
+        opacity: 0.7;
+        box-shadow: 0 6px 18px rgba(8, 145, 178, 0.15);
+    }
+
+    .products-container.mobile-carousel .product-card.center {
+        transform: translateZ(0) scale(1);
+        opacity: 1;
+        box-shadow: 0 8px 24px rgba(8, 145, 178, 0.22);
+    }
+
+    .products-container.mobile-carousel .product-card.far {
+        transform: translateZ(0) scale(0.7);
+        opacity: 0.5;
     }
     
     .slider-controls {
@@ -580,24 +597,24 @@
     }
     
     .info-box {
-        padding: 28px 25px;
+        padding: 22px 20px;
     }
     
     .info-icon {
-        width: 65px;
-        height: 65px;
+        width: 58px;
+        height: 58px;
     }
     
     .info-icon i {
-        font-size: 2rem;
+        font-size: 1.7rem;
     }
     
     .info-box h2 {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
     }
     
     .info-box p {
-        font-size: 0.95rem;
+        font-size: 0.92rem;
     }
     
     /* Referral mobile styling */
@@ -877,19 +894,23 @@
     }
     
     /* Small mobile 3D Carousel */
+    .products-container {
+        gap: 10px;
+        padding: 20px 10px;
+    }
+    
     .product-card.center {
-        width: 180px;
-        height: 220px;
+        width: 200px;
+        height: 250px;
     }
     
     .product-card.side {
-        width: 130px;
-        height: 160px;
+        width: 150px;
+        height: 190px;
     }
     
-    .products-container {
-        gap: 8px;
-        padding: 15px 5px;
+    .product-card.far {
+        display: none; /* Hide far cards on mobile */
     }
     
     /* How It Works small mobile */
@@ -964,24 +985,24 @@
     }
     
     .info-box {
-        padding: 25px 20px;
+        padding: 20px 16px;
     }
     
     .info-icon {
-        width: 60px;
-        height: 60px;
+        width: 48px;
+        height: 48px;
     }
     
     .info-icon i {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
     
     .info-box h2 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
     
     .info-box p {
-        font-size: 0.9rem;
+        font-size: 0.88rem;
     }
     
     /* Referral small mobile */
